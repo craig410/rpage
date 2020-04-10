@@ -3,30 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <script src="js/jquery-1.10.2.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
     <script src="../responsive-paginate.js"></script>
     <script>
         $(document).ready(function () {
             $.fn.generateRandomPagination = function(options)
             {
-                var content = '<li class="left-etc"><a href="#">&laquo;</a></li>';
+                var content = '<li class="page-item left-etc"><a href="#" class="page-link">&laquo;</a></li>';
                 for (var i = 1; i <= options.max_value; i++)
                 {
                     if (i == options.selected_value)
-                        content += '<li class="active"><span>' + i + '</span></li>';
+                        content += '<li class="page-item active"><span class="page-link">' + i + '</span></li>';
                     else
-                        content += '<li><a href="">' + i + '</a></li>';
+                        content += '<li class="page-item"><a href="" class="page-link">' + i + '</a></li>';
                 }
-                content += '<li><a href="#">&raquo;</a></li>';
+                content += '<li class="page-item"><a href="#" class="page-link">&raquo;</a></li>';
                 $(this).html(content);
             }
 
             for (var i = 1; i <= 6; i++)
             {
-                $("#tests").append('<ul class="pagination"></ul>');
+                $("#tests").append('<nav aria-label="Page navigation example"><ul class="pagination justify-content-center"></ul></nav>');
                 $("#tests").append("<br>");
             }
 
@@ -44,6 +46,6 @@
     </script>
 </head>
 <body>
-    <div id="tests" style="position: relative; background-color: #f5f5f5; margin: 0 auto; text-align: center; margin-top: 50px;"></div>
+    <div id="tests" class="bg-light py-5 px-2"></div>
 </body>
 </html>

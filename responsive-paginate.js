@@ -15,7 +15,7 @@
         {
         	this.label = function()
         	{
-        		var active_index = this.els.filter(".active").index();
+        		var active_index = this.active_index;
         		var rp = this;
         		this.els.each(function(){
         			if (rp.isNextOrPrevLink($(this)) == false)
@@ -82,10 +82,10 @@
 
     	    this.removeOne = function()
     	    {
-    	    	var active_index = this.els.filter(".active").index();
+    	    	var active_index = this.active_index;
     	    	var farthest_index = $container.find("li").length - 1;
-    	    	var next = active_index + 1;
-    	    	var prev = active_index - 1;
+    	    	// var next = active_index + 1;
+    	    	// var prev = active_index - 1;
 
     	    	for (var i = farthest_index - 1; i > 0; i--)
     	    	{
@@ -101,14 +101,20 @@
     	    				if (this.isRemovable(candid_candidate))
     		    			{
     			    			candid_candidate.css("display", "none");
+										var rpageindex = candid_candidate.data("rpage-index");
     			    			if (this.needsEtcSign(active_index, farthest_index - 1))
     			    			{
     			    				this.els.eq(farthest_index - 2).before("<li class='disabled removable'><span>...</span></li>");
     			    			}
-    			    			if (this.needsEtcSign(1, active_index))
+    			    			else if (this.needsEtcSign(1, active_index))
     			    			{
     			    				this.els.eq(1).after("<li class='disabled removable'><span>...</span></li>");
-    			    			}
+										}
+    			    			else
+    			    			{
+											this.elements[rpageindex].visible = false;
+										}
+
     			    			return true;
     		    			}
     	    			}
@@ -154,28 +160,52 @@
     	    		this.els.eq(i).css("display", "inline");
     	    	}
     	    	$container.find("li").filter(".removable").remove();
+
+						element_widths = 0;
+						this.elements = Array();
     	    }
 
-            this.calculateWidth = function() 
-            { 
-                var width = 0; 
-                for (var i = 0; i < $container.find("li").length; i++) 
-                { 
-                    if(!($container.find("li").eq(i).css('display') == 'none')) 
-                    { 
-                        if($container.find("li").eq(i).children("a").eq(0).length > 0){
-                            width += $container.find("li").eq(i).children("a").eq(0).outerWidth();
+            this.calculateWidth = function()
+            {
+							if (element_widths !== 1){
+								element_widths = 1;
+                var width = 0;
+                for (var i = 0; i < this.els.length; i++)
+                {
+									var $el = $(this.els[i]);
+									var elwidth = 0;
+                    if(!($el.css('display') === 'none'))
+                    {
+                        if($el.children("a").eq(0).length > 0){
+													elwidth += $el.children("a").eq(0).outerWidth();
                         }
-                        if($container.find("li").eq(i).children("span").eq(0).length > 0){
-                            width += $container.find("li").eq(i).children("span").eq(0).outerWidth();
-                        }                   
-                    } 
-                } 
-                return width; 
+                        if($el.children("span").eq(0).length > 0){
+													elwidth += $el.children("span").eq(0).outerWidth();
+                        }
+                    }
+									width += elwidth;
+									$el.data("rpage-index",i);
+									this.elements[i] = {"width":elwidth, "visible":true};
+                }
+                return width;
+							} else {
+								width = 0;
+								for (i = 0; i < this.elements.length; ++i) {
+									if (this.elements[i].visible === true){
+										width += this.elements[i].width;
+									}
+								}
+								return width;
+							}
             }
 
     	    this.els = $container.find("li");
-    	    this.label();
+
+					var element_widths = 0;
+					this.elements = Array();
+					this.active_index = this.els.filter(".active").index();
+
+					this.label();
     	    this.makeResponsive();
 
     	    var resize_timer;
